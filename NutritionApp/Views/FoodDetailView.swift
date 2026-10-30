@@ -76,5 +76,5 @@ struct FoodDetailView: View {
     NavigationStack {
         FoodDetailView(food: FoodData.foods.first { $0.name == "Izgara Tavuk" }!)
     }
-    .environment(FoodViewModel())
+    .environment(FoodViewModel(userEmail: "preview"))
 }

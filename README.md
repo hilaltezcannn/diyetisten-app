@@ -9,8 +9,9 @@ Yiyecek ve içeceklerin besin değerlerini (kalori, protein, karbonhidrat, yağ)
 - Ürün detay sayfası (100 g için besin değerleri)
 - Ürün ismine göre arama
 - Favorilere ekleme
-- Profil ve profil düzenleme (günlük kalori/protein hedefleri)
-- Profil ve favoriler UserDefaults ile lokal olarak saklanır
+- Üye olma ve giriş yapma (hesaplar cihazda saklanır, şifreler tuzlanmış SHA-256 özetiyle tutulur)
+- Profil ve profil düzenleme (günlük kalori/protein hedefleri), çıkış yapma
+- Profil ve favoriler her kullanıcı için ayrı olarak UserDefaults ile lokal saklanır
 
 ## Teknoloji
 

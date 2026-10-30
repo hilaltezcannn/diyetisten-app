@@ -110,6 +110,6 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .environment(FoodViewModel())
-        .environment(ProfileViewModel())
+        .environment(FoodViewModel(userEmail: "preview"))
+        .environment(ProfileViewModel(user: AppUser(name: "Hilal", email: "preview", salt: "", passwordHash: "")))
 }

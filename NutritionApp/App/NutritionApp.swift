@@ -2,20 +2,45 @@ import SwiftUI
 
 @main
 struct NutritionApp: App {
-    @State private var foodViewModel = FoodViewModel()
-    @State private var profileViewModel = ProfileViewModel()
+    @State private var authViewModel = AuthViewModel()
 
     var body: some Scene {
         WindowGroup {
-            MainTabView()
-                .environment(foodViewModel)
-                .environment(profileViewModel)
+            RootView()
+                .environment(authViewModel)
                 .tint(.appGreen)
         }
     }
 }
 
+/// Giriş yapılmamışsa giriş ekranını, yapılmışsa uygulamanın kendisini gösterir.
+struct RootView: View {
+    @Environment(AuthViewModel.self) private var authVM
+
+    var body: some View {
+        Group {
+            if let user = authVM.currentUser {
+                MainTabView(user: user)
+                    .id(user.email)
+                    .transition(.opacity)
+            } else {
+                LoginView()
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut, value: authVM.currentUser)
+    }
+}
+
 struct MainTabView: View {
+    @State private var foodViewModel: FoodViewModel
+    @State private var profileViewModel: ProfileViewModel
+
+    init(user: AppUser) {
+        _foodViewModel = State(initialValue: FoodViewModel(userEmail: user.email))
+        _profileViewModel = State(initialValue: ProfileViewModel(user: user))
+    }
+
     var body: some View {
         TabView {
             HomeView()
@@ -25,6 +50,8 @@ struct MainTabView: View {
             ProfileView()
                 .tabItem { Label("Profil", systemImage: "person.fill") }
         }
+        .environment(foodViewModel)
+        .environment(profileViewModel)
     }
 }
 

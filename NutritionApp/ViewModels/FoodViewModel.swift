@@ -3,15 +3,16 @@ import Observation
 
 @Observable
 final class FoodViewModel {
-    private static let favoritesKey = "favoriteFoodNames"
+    private let favoritesKey: String
 
     let foods: [Food]
     var searchText = ""
     private(set) var favoriteNames: Set<String>
 
-    init(foods: [Food] = FoodData.foods) {
+    init(userEmail: String, foods: [Food] = FoodData.foods) {
         self.foods = foods
-        let saved = UserDefaults.standard.stringArray(forKey: Self.favoritesKey) ?? []
+        favoritesKey = "favoriteFoodNames.\(userEmail)"
+        let saved = UserDefaults.standard.stringArray(forKey: favoritesKey) ?? []
         self.favoriteNames = Set(saved)
     }
 
@@ -40,6 +41,6 @@ final class FoodViewModel {
         } else {
             favoriteNames.insert(food.name)
         }
-        UserDefaults.standard.set(Array(favoriteNames), forKey: Self.favoritesKey)
+        UserDefaults.standard.set(Array(favoriteNames), forKey: favoritesKey)
     }
 }

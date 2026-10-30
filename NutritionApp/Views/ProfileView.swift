@@ -3,7 +3,9 @@ import SwiftUI
 struct ProfileView: View {
     @Environment(ProfileViewModel.self) private var profileVM
     @Environment(FoodViewModel.self) private var foodVM
+    @Environment(AuthViewModel.self) private var authVM
     @State private var isEditing = false
+    @State private var isConfirmingLogout = false
 
     var body: some View {
         let profile = profileVM.profile
@@ -57,6 +59,27 @@ struct ProfileView: View {
                             .padding()
                             .foregroundStyle(.white)
                             .background(Color.appGreen, in: RoundedRectangle(cornerRadius: 16))
+                    }
+
+                    Button(role: .destructive) {
+                        isConfirmingLogout = true
+                    } label: {
+                        Label("Çıkış Yap", systemImage: "rectangle.portrait.and.arrow.right")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .foregroundStyle(.red)
+                            .background(Color.red.opacity(0.1), in: RoundedRectangle(cornerRadius: 16))
+                    }
+                    .confirmationDialog("Çıkış yapmak istediğine emin misin?", isPresented: $isConfirmingLogout, titleVisibility: .visible) {
+                        Button("Çıkış Yap", role: .destructive) { authVM.logout() }
+                        Button("Vazgeç", role: .cancel) {}
+                    }
+
+                    if let email = authVM.currentUser?.email {
+                        Text(email)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 .padding()

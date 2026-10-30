@@ -3,7 +3,7 @@ import Observation
 
 @Observable
 final class ProfileViewModel {
-    private static let profileKey = "userProfile"
+    private let profileKey: String
 
     var profile: UserProfile {
         didSet { save() }
@@ -17,17 +17,20 @@ final class ProfileViewModel {
     let consumedFat = 45
     let fatGoal = 70
 
-    init() {
-        if let data = UserDefaults.standard.data(forKey: Self.profileKey),
+    init(user: AppUser) {
+        profileKey = "userProfile.\(user.email)"
+        if let data = UserDefaults.standard.data(forKey: profileKey),
            let saved = try? JSONDecoder().decode(UserProfile.self, from: data) {
             profile = saved
         } else {
-            profile = .sample
+            var profile = UserProfile.sample
+            profile.name = user.name
+            self.profile = profile
         }
     }
 
     private func save() {
         guard let data = try? JSONEncoder().encode(profile) else { return }
-        UserDefaults.standard.set(data, forKey: Self.profileKey)
+        UserDefaults.standard.set(data, forKey: profileKey)
     }
 }
